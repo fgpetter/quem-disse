@@ -12,7 +12,9 @@ class QuemDisse {
       add_action( 'init', [$this, 'register_sources'] );
       add_action( 'init', [$this, 'register_authors'] );
       add_action( 'admin_init', [$this, 'authors_add_metabox_image'] );
+      add_action( 'admin_init', [$this, 'authors_add_metabox_username'] );
       add_action( 'save_post_authors', [$this, 'authors_save_metabox_image'] );
+      add_action( 'save_post_authors', [$this, 'authors_save_metabox_username'] );
     }
   }
 
@@ -235,7 +237,7 @@ class QuemDisse {
     if ( isset( $_POST['custom_media'] ) ) {
 
       if ( ! isset( $_POST['custom_media_nonce'] ) || ! wp_verify_nonce( $_POST['custom_media_nonce'], 'custom_media_nonce_action' ) ) {
-      wp_die( __( 'Impossível salvar', 'quemdisse') );
+        wp_die( __( 'Impossível salvar', 'quemdisse') );
       }
 
       if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -249,5 +251,59 @@ class QuemDisse {
       update_post_meta( $post_id, '_custom_media', esc_url_raw( $_POST['custom_media'] ) );
     }
   }
+
+  /**
+   * Adiciona caixa de input de nome de usuário para autores.
+   *
+   */
+  public function authors_add_metabox_username() {
+    add_meta_box(
+      'author_username',
+      __('Adicione um nome de usuário para o autor', 'quemdisse'),
+      [$this, 'author_metabox_username'],
+      'authors',
+      'side', // normal, side, advanced
+      'high', // low, high, default
+    );
+  }
+
+  /**
+   * Mostra um input de texto para que o usuário digite o nome de usuário
+   * que deseja atrelar a página do autor.
+   *
+   * @param WP_Post $post O autor que est  sendo editado.
+   */
+  public function author_metabox_username($post) {
+    ?>
+    <input type="text" name="author_username" id="author_username" class="components-text-control__input" 
+      value="<?php echo get_post_meta( $post->ID, '_author_username', true ); ?>"
+    >
+    <small> Digite o nome de usuário para atrelar a página ao autor.</small>
+    <?php
+  }
+
+  /**
+   * Salva o nome de usuário do autor em uma meta box.
+   *
+   * Verifica se o nome de usuário existe e se o usuário tem permissão para
+   * editar a página do autor. Se sim, salva o nome de usuário na meta box.
+   *
+   * @param int $post_id ID da página do autor.
+   */
+  public function authors_save_metabox_username( $post_id ) {
+
+    if ( isset( $_POST['author_username'] ) ) {
+      $author_username = sanitize_text_field( $_POST['author_username'] );
+      $user = get_user_by( 'login', $author_username );
+
+      if( $user ) {
+        update_post_meta( $post_id, '_author_username', $_POST['author_username'] );
+      } else { 
+        wp_die( __( 'Impossível salvar', 'quemdisse') );
+      }
+    }
+  }
+
+
 }
 $quem_disse = new QuemDisse();

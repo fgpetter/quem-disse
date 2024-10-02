@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The plugin bootstrap file
  *
@@ -21,15 +20,17 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( !defined( 'WPINC' ) || !function_exists( 'add_action' ) ) {
+  die;
 }
 
 define( 'QUEMDISSE_VERSION', '0.1' );
 define( 'QUEMDISSE__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'QUEMDISSE__MINIMUM_WP_VERSION', '6.3' );
 
+require_once( QUEMDISSE__PLUGIN_DIR . 'class.quemdisse.php' );
+require_once( QUEMDISSE__PLUGIN_DIR . 'class.quemdisse-admin.php' );
+require_once( QUEMDISSE__PLUGIN_DIR . 'class.quemdisse-front.php' );
+
 register_activation_hook( __FILE__, array( 'QuemDisse', 'plugin_activation' ) );
 register_deactivation_hook( __FILE__, array( 'QuemDisse', 'plugin_deactivation' ) );
-
-require_once( QUEMDISSE__PLUGIN_DIR . 'class.quemdisse.php' );

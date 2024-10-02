@@ -27,9 +27,11 @@ wp-config.php
 /wp-content/themes/
 
 # Example plugin
+/wp-content/db.php
 /wp-content/plugins/hello.php
 /wp-content/plugins/akismet
 /wp-content/plugins/loco-translate
+/wp-content/plugins/query-monitor
 
 # Uploads
 /wp-content/uploads/

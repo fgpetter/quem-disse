@@ -11,10 +11,22 @@ class QuemDisse {
 
       add_action( 'init', [$this, 'register_sources'] );
       add_action( 'init', [$this, 'register_authors'] );
+
       add_action( 'admin_init', [$this, 'authors_add_metabox_image'] );
       add_action( 'admin_init', [$this, 'authors_add_metabox_username'] );
+      add_action( 'admin_init', [$this, 'authors_add_metabox_bio'] );
+      add_action( 'admin_init', [$this, 'authors_add_metabox_job'] );
+      add_action( 'admin_init', [$this, 'authors_add_metabox_editorial'] );
+      add_action( 'admin_init', [$this, 'authors_add_metabox_social'] );
+      add_action( 'admin_init', [$this, 'authors_add_metabox_selo'] );
+
       add_action( 'save_post_authors', [$this, 'authors_save_metabox_image'] );
       add_action( 'save_post_authors', [$this, 'authors_save_metabox_username'] );
+      add_action( 'save_post_authors', [$this, 'authors_save_metabox_bio'] );
+      add_action( 'save_post_authors', [$this, 'authors_save_metabox_job'] );
+      add_action( 'save_post_authors', [$this, 'authors_save_metabox_editorial'] );
+      add_action( 'save_post_authors', [$this, 'authors_save_metabox_social'] );
+      add_action( 'save_post_authors', [$this, 'authors_save_metabox_selo'] );
     }
   }
 
@@ -45,7 +57,7 @@ class QuemDisse {
   }
 
   /**
-  * Cria tela de cadastro de fontes
+  * Cria tela de cadastro de autores
   */
   public function register_authors() {
 
@@ -90,7 +102,7 @@ class QuemDisse {
       'has_archive' => true,
       'hierarchical' => false,
       'menu_position' => null,
-      'supports' => ['title', 'editor','excerpt'],
+      'supports' => ['title', 'editor'],
       'menu_icon'  => 'dashicons-id',
     ];
 
@@ -99,7 +111,7 @@ class QuemDisse {
   }
 
   /**
-  * Cria tela de cadastro de autores
+  * Cria tela de cadastro de fontes
   */
   public function register_sources() {
 
@@ -171,7 +183,7 @@ class QuemDisse {
   /**
    * Renderiza a caixa de upload de imagem para autores.
    *
-   * @param WP_Post $post O autor que est  sendo editado.
+   * @param WP_Post $post
    */
   public function author_metabox_image ($post) {
     $media_url = get_post_meta( $post->ID, '_custom_media', true );
@@ -268,10 +280,10 @@ class QuemDisse {
   }
 
   /**
-   * Mostra um input de texto para que o usuário digite o nome de usuário
+   * Mostra um input de texto para nome de usuário
    * que deseja atrelar a página do autor.
    *
-   * @param WP_Post $post O autor que est  sendo editado.
+   * @param WP_Post $post
    */
   public function author_metabox_username($post) {
     ?>
@@ -284,9 +296,7 @@ class QuemDisse {
 
   /**
    * Salva o nome de usuário do autor em uma meta box.
-   *
-   * Verifica se o nome de usuário existe e se o usuário tem permissão para
-   * editar a página do autor. Se sim, salva o nome de usuário na meta box.
+   * Verifica se o nome de usuário existe, se sim, salva o nome de usuário na meta box.
    *
    * @param int $post_id ID da página do autor.
    */
@@ -297,13 +307,275 @@ class QuemDisse {
       $user = get_user_by( 'login', $author_username );
 
       if( $user ) {
-        update_post_meta( $post_id, '_author_username', $_POST['author_username'] );
+        update_post_meta( $post_id, '_author_username', $author_username );
       } else { 
         wp_die( __( 'Impossível salvar', 'quemdisse') );
       }
     }
   }
 
+  /**
+   * Adiciona caixa de input de biografia resumida para autores.
+   *
+   */
+  public function authors_add_metabox_bio() {
+    add_meta_box(
+      'author_bio',
+      __('Adicione o texto de biografia resumida', 'quemdisse'),
+      [$this, 'author_metabox_bio'],
+      'authors',
+      'normal', // normal, side, advanced
+      'high', // low, high, default
+    );
+  }
+
+  /**
+   * Mostra um input de caixa texto para biografia resumida
+   * que será exibida no rodapé do post.
+   *
+   * @param WP_Post $post
+   */
+  public function author_metabox_bio($post) {
+    ?>
+    <textarea name="author_bio" id="author_bio" class="components-text-control__input"><?php echo get_post_meta( $post->ID, '_author_bio', true ); ?></textarea>
+    <small> Digite biografia resumida que será exibida no rodapé do post.</small>
+    <?php
+  }
+
+  /**
+   * Salva a mini biografia do autor em uma meta box.
+   *
+   * @param int $post_id ID da página do autor.
+   */
+  public function authors_save_metabox_bio( $post_id ) {
+
+    if ( isset( $_POST['author_bio'] ) ) {
+      $author_bio = sanitize_text_field( $_POST['author_bio'] );
+      update_post_meta( $post_id, '_author_bio', $author_bio );
+    }
+  }
+
+  /**
+   * Adiciona caixa de input de cargo do autor.
+   *
+   */
+  public function authors_add_metabox_job() {
+    add_meta_box(
+      'author_job',
+      __('Adicione o cargo do autor e DRT se existir', 'quemdisse'),
+      [$this, 'author_metabox_job'],
+      'authors',
+      'normal', // normal, side, advanced
+      'high', // low, high, default
+    );
+  }
+
+  /**
+   * Mostra um input de texto para cargo do autor
+   * que deseja atrelar a página do autor.
+   *
+   * @param WP_Post $post
+   */
+  public function author_metabox_job($post) {
+    ?>
+    <div style="display: flex; gap: 1rem">
+      <div>
+        <input type="text" name="author_job" id="author_job" class="components-text-control__input" placeholder="Cargo do autor"
+          value="<?php echo get_post_meta( $post->ID, '_author_job', true ); ?>"
+        >
+        <small> Digite o cargo do autor para atrelar a página ao autor.</small>
+      </div>
+      <div>
+        <input type="text" name="author_drt" id="author_drt" class="components-text-control__input" placeholder="DRT"
+          value="<?php echo get_post_meta( $post->ID, '_author_drt', true ); ?>"
+        >
+        <small> Digite o DRT do autor se possuir.</small>
+      </div>
+    </div>
+
+    <?php
+  }
+
+  /**
+   * Salva o cargo do autor em uma meta box.
+   *
+   * @param int $post_id ID da página do autor.
+   */
+  public function authors_save_metabox_job( $post_id ) {
+
+    if ( isset( $_POST['author_job'] ) ) {
+      $author_job = sanitize_text_field( $_POST['author_job'] );
+      update_post_meta( $post_id, '_author_job', $author_job );
+    }
+    if ( isset( $_POST['author_drt'] ) ) {
+      $author_drt = sanitize_text_field( $_POST['author_drt'] );
+      update_post_meta( $post_id, '_author_drt', $author_drt );
+    }
+  }
+
+  /**
+   * Adiciona campo de texto para adicionar áreas editoriais
+   */
+  public function authors_add_metabox_editorial() {
+    add_meta_box(
+      'author_editorial',
+      __('Adicione o texto de editoriais', 'quemdisse'),
+      [$this, 'author_metabox_editorial'],
+      'authors',
+      'normal', // normal, side, advanced
+      'high', // low, high, default
+    );
+  }
+
+  /**
+   * Mostra um input de texto para editoriais
+   *
+   * @param WP_Post $post
+   */
+  public function author_metabox_editorial($post) {
+    ?>
+    <textarea name="author_editorial" id="author_editorial" class="components-text-control__input"><?php echo get_post_meta( $post->ID, '_author_editorial', true ); ?></textarea>
+    <small> Digite editoriais separadas por vírgula. Exemplo: "Política, Economia, Esportes"</small>
+    <?php
+  }
+
+  /**
+   * Salva o cargo do autor em uma meta box.
+   *
+   * @param int $post_id ID da página do autor.
+   */
+  public function authors_save_metabox_editorial( $post_id ) {
+
+    if ( isset( $_POST['author_editorial'] ) ) {
+      $author_editorial = sanitize_text_field( $_POST['author_editorial'] );
+      update_post_meta( $post_id, '_author_editorial', $author_editorial );
+    }
+  }
+
+  /**
+   * Adiciona campo de texto para adicionar redes sociais (instagram, linkedin,email)
+   */
+  public function authors_add_metabox_social() {
+    add_meta_box(
+      'author_social',
+      __('Adicione as redes sociais', 'quemdisse'),
+      [$this, 'author_metabox_social'],
+      'authors',
+      'normal', // normal, side, advanced
+      'high', // low, high, default
+    );
+  }
+
+  /**
+   * Mostra inputs de texto para redes sociais e e-mail
+   */
+  public function author_metabox_social($post) {
+    ?>
+    <div style="display: flex; gap: 1rem">
+      <div style="width: 33%;">
+        <input type="text" name="author_instagram" id="author_instagram" class="components-text-control__input" placeholder="Instagram"
+          value="<?php echo get_post_meta( $post->ID, '_author_instagram', true ); ?>"
+        >
+        <small>Ex: @quemdisse</small>
+      </div>
+
+      <div style="width: 33%;">
+        <input type="text" name="author_linkedin" id="author_linkedin" class="components-text-control__input" placeholder="Linedin"
+          value="<?php echo get_post_meta( $post->ID, '_author_linkedin', true ); ?>"
+        >
+        <small>Ex: https://www.linkedin.com/in/quemdisse/</small>
+      </div>
+
+      <div style="width: 33%;">
+        <input type="text" name="author_email" id="author_email" class="components-text-control__input" placeholder="Email"
+          value="<?php echo get_post_meta( $post->ID, '_author_email', true ); ?>"
+        >
+      </div>
+
+    </div>
+    <?php
+  }
+
+  /**
+   * Salva informações de redes sociais de autor
+   *
+   * @param int $post_id ID da página do autor.
+   */
+  public function authors_save_metabox_social( $post_id ) {
+
+    if ( isset( $_POST['author_instagram'] ) ) {
+      $author_instagram = sanitize_text_field( $_POST['author_instagram'] );
+      update_post_meta( $post_id, '_author_instagram', $author_instagram );
+    }
+    if ( isset( $_POST['author_linkedin'] ) ) {
+      $author_linkedin = sanitize_text_field( $_POST['author_linkedin'] );
+      update_post_meta( $post_id, '_author_linkedin', $author_linkedin );
+    }
+    if ( isset( $_POST['author_email'] ) ) {
+      $author_email = sanitize_text_field( $_POST['author_email'] );
+      update_post_meta( $post_id, '_author_email', $author_email );
+    }
+  }
+
+  // adiciona metabox de selecao para atribuição de selos selos: tempo_de_vinculo, formação, numero_artigos
+  public function authors_add_metabox_selo() {
+    add_meta_box(
+      'author_selo',
+      __('Selecione os campos para exibir os selos', 'quemdisse'),
+      [$this, 'author_metabox_selo'],
+      'authors',
+      'side', // normal, side, advanced
+      'default', // low, high, default
+    );
+  }
+
+  public function author_metabox_selo($post) {
+    ?>
+    <div style="margin-right: 1rem; margin-bottom: 0.5rem">
+      <label for="author_selo_tempo">Tempo de vínculo com o veículo</label>
+      <select name="author_selo_tempo" id="author_selo_tempo" class="components-select-control__input" style="width: 100%">
+        <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '1 ano' ); ?>>Oculto</option>
+        <option value="1 ano" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '1 ano' ); ?>>1 ano</option>
+        <option value="5 anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '5 anos' ); ?>>5 anos</option>
+        <option value="10 anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '10 anos' ); ?>>10 anos</option>
+      </select>
+    </div>
+
+    <div style="margin-right: 1rem; margin-bottom: 0.5rem">
+      <label for="author_selo_formacao">Formação</label>
+      <select name="author_selo_formacao" id="author_selo_formacao" class="components-select-control__input" style="width: 100%">
+        <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_formacao', true ), 'estudante' ); ?>>Oculto</option>
+        <option value="estudante" <?php selected( get_post_meta( $post->ID, '_author_selo_formacao', true ), 'estudante' ); ?>>Estudante</option>
+        <option value="jornalista" <?php selected( get_post_meta( $post->ID, '_author_selo_formacao', true ), 'jornalista' ); ?>>Jornalista</option>
+      </select>
+    </div>
+
+    <div style="margin-right: 1rem; margin-bottom: 0.5rem">
+      <label for="author_selo_artigos">Quantidade de artigos escritos</label>
+      <select name="author_selo_artigos" id="author_selo_artigos" class="components-select-control__input" style="width: 100%">
+        <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), 'artigos' ); ?>>Oculto</option>
+        <option value="100" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), 'artigos' ); ?>>Até 100</option>
+        <option value="100+" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), 'artigos' ); ?>>+ de 100</option>
+        <option value="1000+" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), 'artigos' ); ?>>+ de 1000</option>
+      </select>
+    </div>
+    <?php
+  }
+
+  public function authors_save_metabox_selo( $post_id ) {
+    if ( isset( $_POST['author_selo_tempo'] ) ) {
+      $author_selo_tempo = sanitize_text_field( $_POST['author_selo_tempo'] );
+      update_post_meta( $post_id, '_author_selo_tempo', $author_selo_tempo );
+    }
+    if ( isset( $_POST['author_selo_formacao'] ) ) {
+      $author_selo_formacao = sanitize_text_field( $_POST['author_selo_formacao'] );
+      update_post_meta( $post_id, '_author_selo_formacao', $author_selo_formacao );
+    }
+    if ( isset( $_POST['author_selo_artigos'] ) ) {
+      $author_selo_artigos = sanitize_text_field( $_POST['author_selo_artigos'] );
+      update_post_meta( $post_id, '_author_selo_artigos', $author_selo_artigos );
+    }
+  }
 
 }
 $quem_disse = new QuemDisse();

@@ -337,7 +337,8 @@ class QuemDisse {
    */
   public function author_metabox_bio($post) {
     ?>
-    <textarea name="author_bio" id="author_bio" class="components-text-control__input"><?php echo get_post_meta( $post->ID, '_author_bio', true ); ?></textarea>
+    <textarea name="author_bio" id="author_bio" class="components-text-control__input"
+      ><?php echo get_post_meta( $post->ID, '_author_bio', true ); ?></textarea>
     <small> Digite biografia resumida que será exibida no rodapé do post.</small>
     <?php
   }
@@ -434,7 +435,8 @@ class QuemDisse {
    */
   public function author_metabox_editorial($post) {
     ?>
-    <textarea name="author_editorial" id="author_editorial" class="components-text-control__input"><?php echo get_post_meta( $post->ID, '_author_editorial', true ); ?></textarea>
+    <input type="text" name="author_editorial" id="author_editorial" class="components-text-control__input" style="width: 100%;"
+      placeholder="Editoriais" value="<?php echo get_post_meta( $post->ID, '_author_editorial', true ); ?>">
     <small> Digite editoriais separadas por vírgula. Exemplo: "Política, Economia, Esportes"</small>
     <?php
   }
@@ -517,7 +519,9 @@ class QuemDisse {
     }
   }
 
-  // adiciona metabox de selecao para atribuição de selos selos: tempo_de_vinculo, formação, numero_artigos
+  /**
+   * Adiciona metabox de selecao para atribuição de selos selos
+   */
   public function authors_add_metabox_selo() {
     add_meta_box(
       'author_selo',
@@ -528,13 +532,15 @@ class QuemDisse {
       'default', // low, high, default
     );
   }
-
+  /**
+   * Mostra caixas de seleção para os selos
+   */
   public function author_metabox_selo($post) {
     ?>
     <div style="margin-right: 1rem; margin-bottom: 0.5rem">
       <label for="author_selo_tempo">Tempo de vínculo com o veículo</label>
       <select name="author_selo_tempo" id="author_selo_tempo" class="components-select-control__input" style="width: 100%">
-        <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '1 ano' ); ?>>Oculto</option>
+        <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '' ); ?>>Oculto</option>
         <option value="1 ano" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '1 ano' ); ?>>1 ano</option>
         <option value="5 anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '5 anos' ); ?>>5 anos</option>
         <option value="10 anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '10 anos' ); ?>>10 anos</option>
@@ -544,7 +550,7 @@ class QuemDisse {
     <div style="margin-right: 1rem; margin-bottom: 0.5rem">
       <label for="author_selo_formacao">Formação</label>
       <select name="author_selo_formacao" id="author_selo_formacao" class="components-select-control__input" style="width: 100%">
-        <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_formacao', true ), 'estudante' ); ?>>Oculto</option>
+        <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_formacao', true ), '' ); ?>>Oculto</option>
         <option value="estudante" <?php selected( get_post_meta( $post->ID, '_author_selo_formacao', true ), 'estudante' ); ?>>Estudante</option>
         <option value="jornalista" <?php selected( get_post_meta( $post->ID, '_author_selo_formacao', true ), 'jornalista' ); ?>>Jornalista</option>
       </select>
@@ -553,15 +559,20 @@ class QuemDisse {
     <div style="margin-right: 1rem; margin-bottom: 0.5rem">
       <label for="author_selo_artigos">Quantidade de artigos escritos</label>
       <select name="author_selo_artigos" id="author_selo_artigos" class="components-select-control__input" style="width: 100%">
-        <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), 'artigos' ); ?>>Oculto</option>
-        <option value="100" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), 'artigos' ); ?>>Até 100</option>
-        <option value="100+" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), 'artigos' ); ?>>+ de 100</option>
-        <option value="1000+" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), 'artigos' ); ?>>+ de 1000</option>
+        <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '' ); ?>>Oculto</option>
+        <option value="100" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '100' ); ?>>Até 100</option>
+        <option value="100+" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '100+' ); ?>>+ de 100</option>
+        <option value="1000+" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '1000+' ); ?>>+ de 1000</option>
       </select>
     </div>
     <?php
   }
 
+  /**
+   * Salva informações de selos
+   *
+   * @param int $post_id ID da página do autor.
+   */
   public function authors_save_metabox_selo( $post_id ) {
     if ( isset( $_POST['author_selo_tempo'] ) ) {
       $author_selo_tempo = sanitize_text_field( $_POST['author_selo_tempo'] );

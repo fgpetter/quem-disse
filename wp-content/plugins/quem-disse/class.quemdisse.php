@@ -27,6 +27,10 @@ class QuemDisse {
       add_action( 'save_post_authors', [$this, 'authors_save_metabox_editorial'] );
       add_action( 'save_post_authors', [$this, 'authors_save_metabox_social'] );
       add_action( 'save_post_authors', [$this, 'authors_save_metabox_selo'] );
+
+      add_filter( 'theme_templates', [$this, 'authors_register_custom_templates'] );
+      add_filter( 'template_include', [$this, 'authors_load_custom_template'] );
+      add_filter( 'enter_title_here', [$this, 'authors_change_title_text'] );
     }
   }
 
@@ -175,8 +179,8 @@ class QuemDisse {
       __('Adicione uma foto para o autor', 'quemdisse'),
       [$this, 'author_metabox_image'],
       'authors',
-      'normal', // normal, side, advanced
-      'default' // low, high, default
+      'side', // normal, side, advanced
+      'high' // low, high, default
     );
   }
 
@@ -306,10 +310,8 @@ class QuemDisse {
       $author_username = sanitize_text_field( $_POST['author_username'] );
       $user = get_user_by( 'login', $author_username );
 
-      if( $user ) {
+      if( $user || $author_username == '' ) {
         update_post_meta( $post_id, '_author_username', $author_username );
-      } else { 
-        wp_die( __( 'Impossível salvar', 'quemdisse') );
       }
     }
   }
@@ -587,6 +589,52 @@ class QuemDisse {
       update_post_meta( $post_id, '_author_selo_artigos', $author_selo_artigos );
     }
   }
+
+  /**
+   * Registra um template para a página de autores
+   *
+   * @param array $templates Registered templates.
+   * @return array Registered templates.
+   */
+  function authors_register_custom_templates( $templates ) {
+    $templates['single-authors'] = 'Single Author';
+    return $templates;
+  }
+
+  /**
+   * Carrega um template para a página de autores
+   *
+   * @param string $template The template to load.
+   * @return string The template to load.
+   */
+  function authors_load_custom_template( $template ) {
+    if ( is_singular( 'authors' ) ) {
+      $custom_template = plugin_dir_path( __FILE__ ) . 'templates/single-authors.php';
+
+      if ( file_exists( $custom_template ) ) {
+        return $custom_template;
+      }
+      
+    }
+    return $template;
+  }
+
+  /**
+   * Muda o texto padrão do título para "Adicionar nome do autor" quando estiver na tela de adicionar autor.
+   *
+   * @param string $title O título padrão.
+   * @return string O título modificado.
+   */
+  function authors_change_title_text( $title ){
+    $screen = get_current_screen();
+
+    if( 'authors' == $screen->post_type ) {
+      $title = 'Adicionar nome do autor';
+    }
+
+    return $title;
+  }
+
 
 }
 $quem_disse = new QuemDisse();

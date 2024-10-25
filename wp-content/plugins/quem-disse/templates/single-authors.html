@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+  <head>
+    <meta charset="<?php bloginfo( 'charset' ); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php get_header(); ?>
+  </head>
+  <body <?php body_class(); ?>>
+    <?php wp_body_open(); ?>
+    <!-- wp:template-part {"slug":"header"} /-->
+    <div id="site-content" role="main">
+      <header class="entry-header">
+        <h1 class="entry-title"><?php the_title(); ?></h1>
+      </header>
+      <div class="entry-content">
+        <!-- Custom content blocks -->
+        <?php $media_url = get_post_meta( get_the_ID(), '_custom_media', true ); ?>
+        <figure class="wp-block-image">
+          <?php if ( ! empty( $media_url ) ) { echo '<img src="' . esc_url( $media_url ) . '" alt="'. the_title() .'" />'; } ?>
+        </figure>
+        <div class="wp-block-paragraph">
+          <?php the_content(); ?>
+        </div>
+      </div>
+    </div>
+    <!-- wp:template-part {"slug":"footer"} /-->
+    <?php get_footer(); ?>
+  </body>
+</html>

@@ -10,6 +10,10 @@ class QuemDisseFront
       self::$initiated = true;
     }
     add_filter('the_content', [$this, 'show_author_excerpt']);
+    add_action( 'wp_footer', function() {
+      global $template;
+      echo '<div style="display:none;">Template being used: ' . $template . '</div>';
+  } );
   }
 
   public function show_author_excerpt($content) {

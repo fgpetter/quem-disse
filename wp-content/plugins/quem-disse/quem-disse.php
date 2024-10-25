@@ -9,7 +9,7 @@
  * Plugin Name:       Quem Disse - Folha do Mate
  * Plugin URI:        https://www.folhadomate.com.br
  * Description:       Plugin para apresentação de editores e fontes em sites de notícias e portais de comunicação
- * Version:           0.1
+ * Version:           0.2.1
  * Requires at least: 6.3
  * Requires PHP:      8.0
  * Author:            Escritório Móvel

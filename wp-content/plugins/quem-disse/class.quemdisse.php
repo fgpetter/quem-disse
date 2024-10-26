@@ -28,7 +28,8 @@ class QuemDisse {
       add_action( 'save_post_authors', [$this, 'authors_save_metabox_social'] );
       add_action( 'save_post_authors', [$this, 'authors_save_metabox_selo'] );
 
-      add_filter( 'theme_templates', [$this, 'authors_register_custom_templates'] );
+      //add_filter( 'theme_templates', [$this, 'authors_register_custom_templates'] );
+      add_filter( 'template_include', [$this, 'authors_load_custom_page_template'] );
       add_filter( 'template_include', [$this, 'authors_load_custom_template'] );
       add_filter( 'enter_title_here', [$this, 'authors_change_title_text'] );
     }
@@ -200,8 +201,8 @@ class QuemDisse {
         id="custom-media-upload-button" value="<?php esc_attr_e( 'Enviar imagem', 'quemdisse' ); ?>" />
         <input type="button" class="components-button is-destructive" style="width: 100%"
         id="custom-media-remove-button" value="<?php esc_attr_e( 'Remover imagem', 'quemdisse' ); ?>" />
-
     </div>
+    <span style="color: red; font-size: 1rem" >⚠ </span> <small>Certifique-se de que a imagem tenha altura e largura iguais. Você pode usar o editor de mídia para recortar a imagem.</small>
     <script>
     jQuery(document).ready(function($){
       var custom_uploader;
@@ -615,6 +616,24 @@ class QuemDisse {
         return $custom_template;
       }
       
+    }
+    return $template;
+  }
+
+  /**
+   * Carrega um template para a página de autores
+   *
+   * @param string $template The template to load.
+   * @return string The template to load.
+   */
+  function authors_load_custom_page_template( $template ) {
+    global $post;
+    if ( $post->post_name == 'page-authors' ) {
+      $custom_template = plugin_dir_path( __FILE__ ) . 'templates/page-authors.php';
+
+      if ( file_exists( $custom_template ) ) {
+        return $custom_template;
+      }
     }
     return $template;
   }

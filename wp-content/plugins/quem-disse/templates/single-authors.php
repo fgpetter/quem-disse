@@ -22,7 +22,7 @@
               if( ! empty( $media_url ) ) : ?>
               
               <figure class="wp-block-image">
-                <img src="<?php echo esc_url( $media_url ); ?>" alt="<?php the_title(); ?>"  class="rounded-circle"/>
+                <img src="<?php echo esc_url( $media_url ); ?>" alt="<?php the_title(); ?>" class="img-fluid rounded-circle"/>
               </figure>
     
             <?php endif ?>

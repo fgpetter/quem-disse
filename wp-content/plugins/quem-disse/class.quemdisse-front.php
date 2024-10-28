@@ -16,22 +16,59 @@ class QuemDisseFront
   } );
   }
 
+  /**
+   * Filtra o conteudo do do post para incluir um card do autor do post.
+   *
+   * @param string $content
+   * @return string
+   */
   public function show_author_excerpt($content) {
-    if(is_single() && is_singular('post') && is_main_query() && get_option('quemdisse_show_excerpt')) {
-      //var_dump(get_the_author_meta('user_login'));
+
+    if(is_single() && is_singular('post') && (get_post_type() != 'authors') && is_main_query() && get_option('quemdisse_show_excerpt')) {
+      
+      // localiza o autor
+      $author_username = get_the_author_meta('user_login');
+      global $wpdb;
+
+      // localiza o nome do autor na página de autor
+      $author_name = $wpdb->get_results(
+        "SELECT wp_posts.post_title
+        FROM wp_posts
+        WHERE wp_posts.ID = (
+          SELECT post_id 
+          FROM wp_postmeta 
+          WHERE meta_key = '_author_username'
+          AND meta_value = '{$author_username}'
+        )", ARRAY_A)[0]['post_title'];
+
+      // pega os dados do autor
+      $author_data = $wpdb->get_results( 
+        "SELECT wp_postmeta.meta_key, wp_postmeta.meta_value
+        FROM wp_postmeta
+        WHERE post_id = (
+          SELECT post_id 
+          FROM wp_postmeta 
+          WHERE meta_key = '_author_username'
+          AND meta_value = '{$author_username}'
+        )
+        AND meta_key IN ('_author_bio', '_custom_media', '_author_username')", ARRAY_A);
+      
+      // organiza os dados do autor para exibição
+      $author = [];
+      foreach ($author_data as $item) {
+        $author[$item['meta_key']] = $item['meta_value'];
+      }
+
       $author_card = "
       <div class='author-container' >
         <div class='author-name-image'>
           <div class='author-image'>
-          <img src='http://localhost/wp-content/uploads/2024/09/download.jpeg' />
+          <img src='{$author['_custom_media']}' alt='{$author_name}' />
           </div>
-          <h3 class='author-name' >Nome do Autor</h3>
+          <h3 class='author-name' >{$author_name}</h3>
         </div>
-        <p class='author-description' >Suspendisse lorem ligula, faucibus nec pharetra eget, interdum vitae erat. 
-          Mauris eu sapien interdum nunc condimentum suscipit a eu diam. 
-          Etiam vitae quam imperdiet, ultrices sapien non, accumsan dui. In dictum neque 
-          id imperdiet varius. Nunc semper nisl nec rutrum sagittis.</p>
-        <p class='author-page'> <a href='#'>Clique Aqui para ver o autor</a> </p>
+        <p class='author-description' >{$author['_author_bio']}</p>
+        <p class='author-page'> <a href='/authors/{$author['_author_username']}'>Clique Aqui para ver o autor</a> </p>
       </div>
       ";
       return $this->author_card_styles().$content."<br><br>".$author_card;
@@ -40,6 +77,11 @@ class QuemDisseFront
     return $content;
   }
 
+  /**
+   * Gera o CSS para o card do autor.
+   * 
+   * @return string
+   */
   public function author_card_styles(){
     ?>
     <style>

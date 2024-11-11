@@ -276,7 +276,7 @@ class QuemDisse {
   public function authors_add_metabox_username() {
     add_meta_box(
       'author_username',
-      __('Adicione um nome de usuário para o autor', 'quemdisse'),
+      __('Selecione o autor', 'quemdisse'),
       [$this, 'author_metabox_username'],
       'authors',
       'side', // normal, side, advanced
@@ -291,11 +291,21 @@ class QuemDisse {
    * @param WP_Post $post
    */
   public function author_metabox_username($post) {
+    $authors = get_users(['fields' => ['display_name','user_login'],])
     ?>
-    <input type="text" name="author_username" id="author_username" class="components-text-control__input" 
-      value="<?php echo get_post_meta( $post->ID, '_author_username', true ); ?>"
-    >
-    <small> Digite o nome de usuário para atrelar a página ao autor.</small>
+    <div style="margin-right: 1rem; margin-bottom: 0.5rem">
+      <select name="_author_username" id="_author_username" class="components-select-control__input" style="width: 100%">
+        <option value="">Selecione</option>
+        <?php foreach ($authors as $author) { ?>
+          <option <?php selected( get_post_meta( $post->ID, '_author_username', true ), $author->user_login ); ?> value="<?php echo $author->user_login; ?>"><?php echo $author->display_name; ?></option>
+        <?php } ?>
+      </select>
+    </div>
+    <small> Ao selecionar o autor você irá atrelar essa página de perfil ao autor selecionado. 
+      Caso não tenha nehum autor selecionado, a página não será exibida.</small>
+      <br>
+      <span style="color: red; font-size: 1rem" >⚠ </span>
+      <small> Certifique-se que o autor selecionado não esteja atrelado a outra página de autor.</small>
     <?php
   }
 
@@ -390,12 +400,21 @@ class QuemDisse {
         <small> Digite o cargo do autor para atrelar a página ao autor.</small>
       </div>
       <div>
-        <input type="text" name="author_drt" id="author_drt" class="components-text-control__input" placeholder="DRT"
+        <input type="text" name="author_drt" id="author_drt" class="components-text-control__input" placeholder="Documento profissional"
           value="<?php echo get_post_meta( $post->ID, '_author_drt', true ); ?>"
         >
-        <small> Digite o DRT do autor se possuir.</small>
+        <small> Digite o DRT ou outro documento profissional do autor se possuir.</small>
       </div>
     </div>
+    <div>
+      <div style="margin-top: 20px;">
+        <input type="text" name="author_formacao" id="author_formacao" class="components-text-control__input" placeholder="Resumo da formação"
+          value="<?php echo get_post_meta( $post->ID, '_author_formacao', true ); ?>"
+        >
+        <small> Digite um resomu da formação do autor. Ex.: insituições de ensino, especializações, MBAs, Mestrados...</small>
+      </div>
+    </div>
+
 
     <?php
   }
@@ -414,6 +433,10 @@ class QuemDisse {
     if ( isset( $_POST['author_drt'] ) ) {
       $author_drt = sanitize_text_field( $_POST['author_drt'] );
       update_post_meta( $post_id, '_author_drt', $author_drt );
+    }
+    if ( isset( $_POST['author_formacao'] ) ) {
+      $author_formacao = sanitize_text_field( $_POST['author_formacao'] );
+      update_post_meta( $post_id, '_author_formacao', $author_formacao );
     }
   }
 
@@ -544,9 +567,12 @@ class QuemDisse {
       <label for="author_selo_tempo">Tempo de vínculo com o veículo</label>
       <select name="author_selo_tempo" id="author_selo_tempo" class="components-select-control__input" style="width: 100%">
         <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '' ); ?>>Oculto</option>
-        <option value="1 ano" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '1 ano' ); ?>>1 ano</option>
-        <option value="5 anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '5 anos' ); ?>>5 anos</option>
-        <option value="10 anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '10 anos' ); ?>>10 anos</option>
+        <option value="5_anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '5_anos' ); ?>>Mais de 5 anos</option>
+        <option value="10_anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '10_anos' ); ?>>Mais de 10 anos</option>
+        <option value="20_anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '20_anos' ); ?>>Mais de 20 anos</option>
+        <option value="30_anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '30_anos' ); ?>>Mais de 30 anos</option>
+        <option value="40_anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '40_anos' ); ?>>Mais de 40 anos</option>
+        <option value="50_anos" <?php selected( get_post_meta( $post->ID, '_author_selo_tempo', true ), '50_anos' ); ?>>Mais de 50 anos</option>
       </select>
     </div>
 
@@ -560,12 +586,15 @@ class QuemDisse {
     </div>
 
     <div style="margin-right: 1rem; margin-bottom: 0.5rem">
-      <label for="author_selo_artigos">Quantidade de artigos escritos</label>
+      <label for="author_selo_artigos">Quantidade de matérias publicadas</label>
       <select name="author_selo_artigos" id="author_selo_artigos" class="components-select-control__input" style="width: 100%">
         <option value="" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '' ); ?>>Oculto</option>
-        <option value="100" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '100' ); ?>>Até 100</option>
-        <option value="100+" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '100+' ); ?>>+ de 100</option>
-        <option value="1000+" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '1000+' ); ?>>+ de 1000</option>
+        <option value="500_materias" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '500_materias' ); ?>>Mais de 500 matérias</option>
+        <option value="1000_materias" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '1000_materias' ); ?>>Mais de 1000 matérias</option>
+        <option value="2000_materias" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '2000_materias' ); ?>>Mais de 2000 matérias</option>
+        <option value="3000_materias" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '3000_materias' ); ?>>Mais de 3000 matérias</option>
+        <option value="4000_materias" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '4000_materias' ); ?>>Mais de 4000 matérias</option>
+        <option value="5000_materias" <?php selected( get_post_meta( $post->ID, '_author_selo_artigos', true ), '5000_materias' ); ?>>Mais de 5000 matérias</option>
       </select>
     </div>
     <?php

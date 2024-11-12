@@ -161,7 +161,7 @@ class QuemDisse {
       'has_archive' => true,
       'hierarchical' => false,
       'menu_position' => null,
-      'supports' => ['title', 'editor', 'thumbnail'],
+      'supports' => ['title', 'editor', 'thumbnail','author'],
       'menu_icon'  => 'dashicons-format-quote',
     ];
 

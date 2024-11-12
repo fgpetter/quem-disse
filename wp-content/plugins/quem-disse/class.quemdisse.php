@@ -400,7 +400,7 @@ class QuemDisse {
         <small> Digite o cargo do autor para atrelar a página ao autor.</small>
       </div>
       <div>
-        <input type="text" name="author_drt" id="author_drt" class="components-text-control__input" placeholder="Documento profissional"
+        <input type="text" name="author_drt" id="author_drt" class="components-text-control__input" placeholder="Ex. DRT-12345"
           value="<?php echo get_post_meta( $post->ID, '_author_drt', true ); ?>"
         >
         <small> Digite o DRT ou outro documento profissional do autor se possuir.</small>
@@ -411,7 +411,7 @@ class QuemDisse {
         <input type="text" name="author_formacao" id="author_formacao" class="components-text-control__input" placeholder="Resumo da formação"
           value="<?php echo get_post_meta( $post->ID, '_author_formacao', true ); ?>"
         >
-        <small> Digite um resomu da formação do autor. Ex.: insituições de ensino, especializações, MBAs, Mestrados...</small>
+        <small> Digite um resumo da formação do autor. Ex.: insituições de ensino, especializações, MBAs, Mestrados...</small>
       </div>
     </div>
 

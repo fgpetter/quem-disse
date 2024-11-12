@@ -66,10 +66,16 @@
         <!-- RESUMO -->
 
         <div class="card p-3 border-0 card-credentials mb-2">
-          <?php $job = get_post_meta( $post->ID, '_author_job', true ); $formacao = get_post_meta( $post->ID, '_author_formacao', true );
+          <?php $job = get_post_meta( $post->ID, '_author_job', true ); 
+                $formacao = get_post_meta( $post->ID, '_author_formacao', true );
+                $drt = get_post_meta( $post->ID, '_author_drt', true );
             if( ! empty( $job ) ) : ?>
               <p class="author-job">
-                <strong>Cargo:</strong> <?php echo $job; ?>
+                <strong>Cargo:</strong> 
+                <?php 
+                  echo $job;
+                  if( ! empty( $drt ) ){ echo ' | '.$drt;};
+                ?>
               </p>
             <?php endif ?>
             <?php if( ! empty( $formacao ) ) : ?>
@@ -104,17 +110,6 @@
                   }
                 ?>
                 <strong>Tempo de vínculo com a empresa:</strong> <?php echo $tempo; ?>
-              </p>
-            <?php endif ?>
-
-            <?php $formacao = get_post_meta( $post->ID, '_author_job', true ); 
-            if( ! empty( $formacao ) ) : ?>
-              <p class="author-job mb-0">
-                <strong> <?php echo $formacao ?> </strong> 
-                <?php $drt = get_post_meta( $post->ID, '_author_drt', true );
-                  if( ! empty( $drt ) ) : ?>
-                    (DRT: <?php echo $drt; ?>)
-                  <?php endif ?>
               </p>
             <?php endif ?>
 

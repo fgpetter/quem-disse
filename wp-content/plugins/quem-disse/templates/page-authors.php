@@ -5,15 +5,16 @@ global $wpdb;
 
 $author_data = $wpdb->get_results( 
   "SELECT wp_postmeta.meta_key, wp_postmeta.meta_value, wp_posts.post_title
-  FROM wp_postmeta
-  INNER JOIN wp_posts ON wp_postmeta.post_id = wp_posts.ID
-  WHERE post_id IN (
+    FROM wp_postmeta
+    INNER JOIN wp_posts ON wp_postmeta.post_id = wp_posts.ID
+    WHERE post_id IN (
     SELECT post_id 
     FROM wp_postmeta 
     WHERE meta_key = '_author_username'
     AND meta_value IN ('" . implode("','", array_map( 'esc_sql', $users )) . "')
   )
-  AND meta_key IN ('_author_bio', '_custom_media', '_author_username')", ARRAY_A);
+  AND meta_key IN ('_author_bio', '_custom_media', '_author_username')
+  ORDER BY wp_posts.post_title", ARRAY_A);
 
 $authors = [];
 foreach ($author_data as $author) {

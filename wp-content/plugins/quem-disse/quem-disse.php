@@ -1,6 +1,6 @@
 <?php
 /**
- * The plugin bootstrap file
+ * Plugin Quem Disse
  *
  * @since             1.0
  * @package           Quemdisse
@@ -9,13 +9,13 @@
  * Plugin Name:       Quem Disse - Folha do Mate
  * Plugin URI:        https://www.folhadomate.com.br
  * Description:       Plugin para apresentação de editores e fontes em sites de notícias e portais de comunicação
- * Version:           0.5
+ * Version:           1.0
  * Requires at least: 6.3
  * Requires PHP:      8.0
  * Author:            Escritório Móvel
  * Author URI:        https://escritoriomovel.com
  * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * License URI:       https://www.gnu.org/licenses/old-licenses/gpl-2.0.pt-br.html
  * Text Domain:       quemdisse
  */
 
@@ -24,7 +24,7 @@ if ( !defined( 'WPINC' ) || !function_exists( 'add_action' ) ) {
   die;
 }
 
-define( 'QUEMDISSE_VERSION', '0.5' );
+define( 'QUEMDISSE_VERSION', '1.0' );
 define( 'QUEMDISSE__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'QUEMDISSE__MINIMUM_WP_VERSION', '6.3' );
 

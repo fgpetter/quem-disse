@@ -107,11 +107,11 @@ class QuemDisseAdmin
       }
       ?>
       <div class="updated">
-        <p>Filter Words Updated</p>
+        <p>Configurações salvas</p>
       </div> <?php
     } else { ?>
     <div class="error">
-        <p>Request denied</p>
+        <p>Houve um erro, tente novamente</p>
     </div> <?php
     }
   }

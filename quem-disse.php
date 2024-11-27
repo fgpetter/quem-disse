@@ -9,7 +9,7 @@
  * Plugin Name:       Quem Disse - Folha do Mate
  * Plugin URI:        https://www.folhadomate.com.br
  * Description:       Plugin para apresentação de editores e fontes em sites de notícias e portais de comunicação
- * Version:           1.0
+ * Version:           1.1
  * Requires at least: 6.3
  * Requires PHP:      8.0
  * Author:            Escritório Móvel
@@ -24,7 +24,7 @@ if ( !defined( 'WPINC' ) || !function_exists( 'add_action' ) ) {
   die;
 }
 
-define( 'QUEMDISSE_VERSION', '1.0' );
+define( 'QUEMDISSE_VERSION', '1.1' );
 define( 'QUEMDISSE__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'QUEMDISSE__MINIMUM_WP_VERSION', '6.3' );
 

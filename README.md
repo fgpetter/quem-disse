@@ -48,3 +48,4 @@ Version: 1.0^
 
 
 Desenvolvido por [Escritório Móvel](https://www.escritoriomovel.com) em parceria com [Jornal Folha do Mate](https://www.folhadomate.com.br)
+sob licença [GPL-2.0](https://www.gnu.org/licenses/old-licenses/gpl-2.0.pt-br.html)

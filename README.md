@@ -3,7 +3,7 @@
 
 O **Quem disse?** é um plugin de distribuição gratuita, compatível com Wordpress, direcionado a sites de jornalismo. Foi desenvolvido para o [Codesinfo](https://codesinfo.com.br/) (Fundo de inovação contra a desinformação), programa do [Projor](http://projor.org.br) (Instituto Para o Desenvolvimento do Jornalismo), com apoio da GNI (Google News Initiative).
 
-![Quem Disse](https://raw.githubusercontent.com/fgpetter/quem-disse/refs/heads/master/wp-content/plugins/quem-disse/assets/img/logo_quem_disse.png)
+![Quem Disse](https://raw.githubusercontent.com/fgpetter/quem-disse/refs/heads/master/assets/img/logo_quem_disse.png)
 
 
 ## Qual o objetivo do Quem disse?

@@ -113,15 +113,15 @@
               </p>
             <?php endif ?>
 
-            <?php $editorial = get_post_meta( $post->ID, '_author_bio', true ); 
-            if( ! empty( $editorial ) ) : ?>
-              <p class="author-bio"><?php echo $editorial; ?></p>
+            <?php $editorias = get_post_meta( $post->ID, '_author_bio', true ); 
+            if( ! empty( $editorias ) ) : ?>
+              <p class="author-bio"><?php echo $editorias; ?></p>
             <?php endif ?>
 
-            <?php $editorial = get_post_meta( $post->ID, '_author_editorial', true ); 
-            if( ! empty( $editorial ) ) : ?>
+            <?php $editorias = get_post_meta( $post->ID, '_author_editorial', true ); 
+            if( ! empty( $editorias ) ) : ?>
               <p class="author-editorial mb-0">
-                <strong>Editoriais:</strong> <?php echo $editorial; ?>
+                <strong>Editorias:</strong> <?php echo $editorias; ?>
               </p>
             <?php endif ?>
             <div>

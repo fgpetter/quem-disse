@@ -462,8 +462,8 @@ class QuemDisse {
   public function author_metabox_editorial($post) {
     ?>
     <input type="text" name="author_editorial" id="author_editorial" class="components-text-control__input" style="width: 100%;"
-      placeholder="Editoriais" value="<?php echo get_post_meta( $post->ID, '_author_editorial', true ); ?>">
-    <small> Digite editoriais separadas por vírgula. Exemplo: "Política, Economia, Esportes"</small>
+      placeholder="Editorias" value="<?php echo get_post_meta( $post->ID, '_author_editorial', true ); ?>">
+    <small> Digite editorias separadas por vírgula. Exemplo: "Política, Economia, Esportes"</small>
     <?php
   }
 

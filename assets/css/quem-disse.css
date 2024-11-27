@@ -3,6 +3,13 @@
   height: auto;
 }
 
+@media only screen and (max-width: 600px) {
+  .logo-quem-disse {
+    max-width: 70%;
+    height: auto;
+  }
+}
+
 .card-credentials {
   background: #f1f1f1;
 }

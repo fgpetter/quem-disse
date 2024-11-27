@@ -10,27 +10,28 @@
   <body <?php body_class(); ?>>
     <?php wp_body_open(); ?>
     <div id="site-content" role="main" style="max-width: 1000px; margin: 0 auto;">
-      <header class="entry-header mb-5">
-        <h1 class="entry-title"><?php the_title(); ?></h1>
+      <header class="entry-header mb-sm-5">
+        <h1 class="entry-title px-2"><?php the_title(); ?></h1>
       </header>
 
-      <div class="entry-content">
+      <div class="entry-content px-2">
         
         <div class="row">
-          <div class="col-3">
+          <div class="col-5 col-sm-3">
             <?php $media_url = get_post_meta( $post->ID, '_custom_media', true ); 
               if( ! empty( $media_url ) ) : ?>
               
-              <figure class="wp-block-image">
-                <img src="<?php echo esc_url( $media_url ); ?>" alt="<?php the_title(); ?>" class="img-fluid rounded-circle"/>
-              </figure>
+                <figure class="wp-block-image">
+                  <img src="<?php echo esc_url( $media_url ); ?>" alt="<?php the_title(); ?>" class="img-fluid rounded-circle"/>
+                </figure>
     
             <?php endif ?>
           </div>
-          <div class="col-9">
+
+          <div class="col-7 col-sm-9">
             <img src="<?php echo plugins_url( 'quem-disse/assets/img/logo_quem_disse.png', QUEMDISSE__PLUGIN_DIR ) ?>" 
               alt="Logo Quem Disse" class="logo-quem-disse mb-3"/>
-            <div class="row gap-0">
+            <div class="row mb-3">
 
             <!-- SELOS -->
 
@@ -40,21 +41,21 @@
               $selo_artigos = get_post_meta( $post->ID, '_author_selo_artigos', true );
 
               if( ! empty( $selo_tempo ) ) : ?>
-                <div class="col-auto px-1">
+                <div class="col-sm-auto">
                   <img src="<?php echo plugins_url( 'quem-disse/assets/img/'.$selo_tempo.'.png', QUEMDISSE__PLUGIN_DIR ) ?>" 
                     alt="<?php echo get_post_meta( $post->ID, '_author_selo_tempo', true ) ?>" class="selo-tempo me-2"/>
                 </div>
               <?php endif ?>
               
               <?php if( ! empty( $selo_formacao ) ) : ?>
-                <div class="col-auto px-1">
+                <div class="col-sm-auto">
                   <img src="<?php echo plugins_url( 'quem-disse/assets/img/'.$selo_formacao.'.png', QUEMDISSE__PLUGIN_DIR ) ?>" 
                     alt="<?php echo get_post_meta( $post->ID, '_author_selo_tempo', true ) ?>" class="selo-tempo me-2"/>
                 </div>
               <?php endif ?>
 
               <?php if( ! empty( $selo_artigos ) ) : ?>
-                <div class="col-auto px-1">
+                <div class="col-sm-auto">
                   <img src="<?php echo plugins_url( 'quem-disse/assets/img/'.$selo_artigos.'.png', QUEMDISSE__PLUGIN_DIR ) ?>" 
                     alt="<?php echo get_post_meta( $post->ID, '_author_selo_tempo', true ) ?>" class="selo-tempo me-2"/>
                 </div>
@@ -162,7 +163,7 @@
 
         <!-- CONTEÚDO DO POST -->
 
-        <div class="wp-block-paragraph">
+        <div class="wp-block-paragraph px-2">
           <?php the_content(); ?>
         </div>
 
@@ -175,7 +176,7 @@
             if( ! empty( $author ) ) : 
               $user_data = get_user_by('login', $author); ?>
 
-              <h4 class="author-posts-header">Publicações do autor</h4>
+              <h4 class="author-posts-header px-3 px-sm-1">Publicações do autor</h4>
 
               <div class="row">
               <?php
@@ -186,13 +187,13 @@
                 ];
                 $the_query = new WP_Query( $args );
                 if( $the_query->have_posts() ) : while( $the_query->have_posts() ) : $the_query->the_post(); ?>
-                <div class="col-4" style='<?php if( empty(the_post_thumbnail() ) ) { echo "display: none"; } ?>' >
+                <div class="col-sm-4 px-4 px-sm-3" style='<?php if( empty(the_post_thumbnail() ) ) { echo "display: none"; } ?>' >
                   <div class="card border-0" style="max-width: 100%;">
                     <div style="height: 200px; max-width: 100%; 
-                                background: url('<?php echo get_the_post_thumbnail_url($post->ID,"medium") ?>') 
+                                background: url('<?php echo get_the_post_thumbnail_url( $post->ID, "medium" ) ?>') 
                                 no-repeat center center; background-size: cover">
                     </div>
-                    <div class="card-body ps-0">
+                    <div class="card-body ps-0 pt-2">
                       <h5 class="card-title">
                         <a href="<?php the_permalink(); ?>" class="text-decoration-none">
                           <?php the_title(); ?>

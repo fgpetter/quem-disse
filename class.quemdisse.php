@@ -291,13 +291,13 @@ class QuemDisse {
    * @param WP_Post $post
    */
   public function author_metabox_username($post) {
-    $authors = get_users(['fields' => ['display_name','user_login'],])
+    $authors = get_users(['fields' => ['display_name','user_login', "ID"] ])
     ?>
     <div style="margin-right: 1rem; margin-bottom: 0.5rem">
       <select name="_author_username" id="_author_username" class="components-select-control__input" style="width: 100%">
         <option value="">Selecione</option>
         <?php foreach ($authors as $author) { ?>
-          <option <?php selected( get_post_meta( $post->ID, '_author_username', true ), $author->user_login ); ?> value="<?php echo $author->user_login; ?>"><?php echo $author->display_name; ?></option>
+          <option <?php selected( get_post_meta( $post->ID, '_author_username', true ), $author->ID ); ?> value="<?php echo $author->ID; ?>"><?php echo $author->display_name; ?></option>
         <?php } ?>
       </select>
     </div>
@@ -317,9 +317,9 @@ class QuemDisse {
    */
   public function authors_save_metabox_username( $post_id ) {
 
-    if ( isset( $_POST['author_username'] ) ) {
-      $author_username = sanitize_text_field( $_POST['author_username'] );
-      $user = get_user_by( 'login', $author_username );
+    if ( isset( $_POST['_author_username'] ) ) {
+      $author_username = sanitize_text_field( $_POST['_author_username'] );
+      $user = get_user_by( 'ID', $author_username );
 
       if( $user || $author_username == '' ) {
         update_post_meta( $post_id, '_author_username', $author_username );

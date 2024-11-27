@@ -20,11 +20,9 @@
           <div class="col-5 col-sm-3">
             <?php $media_url = get_post_meta( $post->ID, '_custom_media', true ); 
               if( ! empty( $media_url ) ) : ?>
-              
                 <figure class="wp-block-image">
                   <img src="<?php echo esc_url( $media_url ); ?>" alt="<?php the_title(); ?>" class="img-fluid rounded-circle"/>
                 </figure>
-    
             <?php endif ?>
           </div>
 
@@ -170,11 +168,11 @@
         <!-- POSTS DO AUTOR -->
 
         <div class="auhtor-posts" style="margin-top: 70px;">
-          <?php 
-            $author = get_post_meta( $post->ID, '_author_username', true );
+          <?php
+            // localiza dados para carregar posts do autor
+            $user_data = get_user_by( 'ID', get_post_meta( $post->ID, '_author_username', true ) );
 
-            if( ! empty( $author ) ) : 
-              $user_data = get_user_by('login', $author); ?>
+            if( !empty( $user_data ) ) : ?>
 
               <h4 class="author-posts-header px-3 px-sm-1">Publicações do autor</h4>
 
@@ -185,6 +183,7 @@
                   'author' => $user_data->ID,
                   'posts_per_page' => 10
                 ];
+                
                 $the_query = new WP_Query( $args );
                 if( $the_query->have_posts() ) : while( $the_query->have_posts() ) : $the_query->the_post(); ?>
                 <div class="col-sm-4 px-4 px-sm-3" style='<?php if( empty(the_post_thumbnail() ) ) { echo "display: none"; } ?>' >

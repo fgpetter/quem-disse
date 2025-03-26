@@ -44,7 +44,7 @@ PHP > 8.0
 Wordpress > 6.3
 
 ## Versão atual:
-Version: 1.1^
+Version: 1.2^
 
 
 Desenvolvido por [Escritório Móvel](https://www.escritoriomovel.com) em parceria com [Jornal Folha do Mate](https://www.folhadomate.com.br)

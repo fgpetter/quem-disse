@@ -12,6 +12,7 @@ $author_data = $wpdb->get_results(
     FROM wp_postmeta 
     WHERE meta_key = '_author_username'
     AND meta_value IN ('" . implode("','", array_map( 'esc_sql', $users )) . "')
+    OR meta_value IN ('" . implode("','", array_map( 'esc_sql', $user_ids )) . "'))
   )
   AND meta_key IN ('_author_bio', '_custom_media', '_author_username')
   ORDER BY wp_posts.post_title", ARRAY_A);

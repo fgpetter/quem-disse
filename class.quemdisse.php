@@ -668,6 +668,25 @@ class QuemDisse {
   }
 
   /**
+   * Carrega um template para a página de fontes
+   *
+   * @param string $template The template to load.
+   * @return string The template to load.
+   */
+  function sources_load_custom_page_template( $template ) {
+    global $post;
+    if ( $post->post_name == 'page-sources' ) {
+      $custom_template = plugin_dir_path( __FILE__ ) . 'templates/page-sources.php';
+
+      if ( file_exists( $custom_template ) ) {
+        return $custom_template;
+      }
+    }
+    return $template;
+  }
+
+
+  /**
    * Muda o texto padrão do título para "Adicionar nome do autor" quando estiver na tela de adicionar autor.
    *
    * @param string $title O título padrão.
